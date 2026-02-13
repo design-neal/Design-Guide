@@ -1,81 +1,574 @@
 <!DOCTYPE html>
 <html lang="ko">
   <head>
-      <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>Likey Design Guide</title>
-    <style>
-          * { margin: 0; padding: 0; box-sizing: border-box; }
-          body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f5f5f5; color: #333; }
-          header { background: #6C5CE7; color: white; padding: 60px 20px; text-align: center; }
-          header h1 { font-size: 2.5rem; margin-bottom: 10px; }
-          header p { font-size: 1.1rem; opacity: 0.9; }
-          .container { max-width: 960px; margin: 0 auto; padding: 40px 20px; }
-          .section { background: white; border-radius: 12px; padding: 32px; margin-bottom: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
-          .section h2 { font-size: 1.5rem; margin-bottom: 16px; color: #6C5CE7; }
-          .color-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; }
-          .color-card { border-radius: 8px; overflow: hidden; }
-          .color-swatch { height: 80px; }
-          .color-info { padding: 8px; font-size: 0.85rem; text-align: center; background: #fafafa; }
-          footer { text-align: center; padding: 40px; color: #999; font-size: 0.9rem; }
-        </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LIKEY Button Loading Animation</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg: #0E0E12;
+      --surface: #18181F;
+      --surface-2: #1E1E28;
+      --border: #2A2A36;
+      --text-primary: #EBEBEB;
+      --text-secondary: #9E9EAD;
+      --text-muted: #6E6E80;
+      --brand: #413EF0;
+      --brand-dim: rgba(65, 62, 240, 0.15);
+      --btn-bg: #110F1A;
+      --danger: #FF424D;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text-primary);
+      font-family: 'Inter', 'Apple SD Gothic Neo', -apple-system, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 48px 24px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ===== Header ===== */
+    .header {
+      text-align: center;
+      margin-bottom: 56px;
+      max-width: 520px;
+    }
+    .header .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      background: var(--brand-dim);
+      border: 1px solid rgba(65, 62, 240, 0.25);
+      border-radius: 100px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--brand);
+      letter-spacing: 0.3px;
+      margin-bottom: 20px;
+    }
+    .badge::before {
+      content: '';
+      width: 6px; height: 6px;
+      background: var(--brand);
+      border-radius: 50%;
+    }
+    .header h1 {
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      margin-bottom: 10px;
+      background: linear-gradient(135deg, #FFFFFF 30%, #9E9EAD);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .header p {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    /* ===== Demo Area ===== */
+    .demo-area {
+      width: 100%;
+      max-width: 800px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 40px;
+    }
+
+    /* ===== Phone Mockup ===== */
+    .phone-frame {
+      width: 320px;
+      background: var(--surface);
+      border-radius: 32px;
+      border: 1px solid var(--border);
+      padding: 20px 0 0;
+      overflow: hidden;
+      box-shadow: 0 24px 80px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.04) inset;
+    }
+    .phone-status {
+      padding: 0 24px 16px;
+      display: flex;
+      justify-content: center;
+    }
+    .phone-notch {
+      width: 100px;
+      height: 6px;
+      background: var(--border);
+      border-radius: 3px;
+    }
+    .phone-content {
+      background: #FFFFFF;
+      padding: 28px 20px 32px;
+      min-height: 340px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      gap: 20px;
+    }
+
+    /* Mini info section */
+    .info-section {
+      opacity: 0.6;
+    }
+    .info-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 6px 0;
+      font-size: 13px;
+      color: #666;
+    }
+    .info-row.total {
+      font-weight: 700;
+      color: #110F1A;
+      font-size: 15px;
+      border-top: 1px solid #E2E2ED;
+      padding-top: 12px;
+      margin-top: 4px;
+    }
+
+    /* ===== Action Button ===== */
+    .action-btn {
+      position: relative;
+      width: 100%;
+      height: 52px;
+      background: var(--btn-bg);
+      border: none;
+      border-radius: 26px;
+      cursor: pointer;
+      overflow: hidden;
+      outline: none;
+      -webkit-tap-highlight-color: transparent;
+      transition: transform 0.1s ease;
+    }
+    .action-btn:active:not(.is-loading) {
+      transform: scale(0.97);
+    }
+    .action-btn.is-loading {
+      cursor: default;
+      pointer-events: none;
+    }
+
+    /* Button Label */
+    .btn-label {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Inter', 'Apple SD Gothic Neo', sans-serif;
+      font-size: 16px;
+      font-weight: 600;
+      color: #FFFFFF;
+      opacity: 1;
+      transition: none;
+    }
+    .btn-label.exit {
+      transition: opacity 150ms ease-in;
+      opacity: 0;
+    }
+
+    /* Spinner */
+    .btn-spinner {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transform: scale(0.8);
+      transition: none;
+    }
+    .btn-spinner.enter {
+      transition: opacity 200ms cubic-bezier(0.34, 1.56, 0.64, 1),
+                    transform 200ms cubic-bezier(0.34, 1.56, 0.64, 1);
+      transition-delay: 100ms;
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .spinner-ring {
+      width: 24px;
+      height: 24px;
+      border: 2.5px solid rgba(255,255,255,0.2);
+      border-top-color: #FFFFFF;
+      border-radius: 50%;
+    }
+    .spinner-ring.spin {
+      animation: spin 0.7s linear infinite;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* ===== Controls ===== */
+    .controls {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+    .reset-btn {
+      padding: 10px 28px;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      color: var(--text-secondary);
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .reset-btn:hover {
+      background: var(--border);
+      color: var(--text-primary);
+    }
+    .hint {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    /* ===== Spec Cards ===== */
+    .specs {
+      width: 100%;
+      max-width: 800px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .spec-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 20px;
+    }
+    .spec-card .spec-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+    .spec-card .spec-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+    }
+    .spec-card .spec-name {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+    .spec-card .spec-action {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-muted);
+      margin-left: auto;
+    }
+    .spec-rows {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .spec-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+    }
+    .spec-row .key {
+      color: var(--text-muted);
+    }
+    .spec-row .val {
+      font-family: 'SF Mono', 'Menlo', 'Inter', monospace;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-primary);
+      background: var(--surface-2);
+      padding: 3px 10px;
+      border-radius: 6px;
+    }
+    .spec-row .val.brand {
+      color: var(--brand);
+      background: var(--brand-dim);
+    }
+
+    /* ===== Timeline ===== */
+    .timeline-section {
+      width: 100%;
+      max-width: 800px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+    }
+    .timeline-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+    .timeline-tracks {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+    .track {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      height: 28px;
+    }
+    .track-name {
+      width: 100px;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      text-align: right;
+      flex-shrink: 0;
+    }
+    .track-bar-area {
+      flex: 1;
+      height: 28px;
+      position: relative;
+      background: rgba(255,255,255,0.02);
+      border-radius: 6px;
+    }
+    .track-bar {
+      position: absolute;
+      top: 4px;
+      height: 20px;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 600;
+      color: rgba(255,255,255,0.8);
+      letter-spacing: 0.2px;
+    }
+    .track-bar.label-bar {
+      left: 0%;
+      width: 25%;
+      background: linear-gradient(135deg, #6C63FF, #413EF0);
+    }
+    .track-bar.spinner-bar {
+      left: 16.7%;
+      width: 33.3%;
+      background: linear-gradient(135deg, #FF6B8A, var(--danger));
+    }
+
+    /* Timeline axis */
+    .timeline-axis {
+      display: flex;
+      justify-content: space-between;
+      padding-left: 112px;
+      margin-top: 8px;
+    }
+    .axis-tick {
+      font-family: 'SF Mono', 'Menlo', monospace;
+      font-size: 11px;
+      color: var(--text-muted);
+      position: relative;
+    }
+    .axis-tick::before {
+      content: '';
+      position: absolute;
+      top: -8px;
+      left: 50%;
+      width: 1px;
+      height: 5px;
+      background: var(--border);
+    }
+
+    /* ===== Progress indicator ===== */
+    .progress-ring {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: transparent;
+      overflow: hidden;
+      border-radius: 26px 26px 0 0;
+    }
+    .progress-ring .bar {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--brand), #8B5CF6);
+      transition: width 0.3s linear;
+    }
+    .is-loading .progress-ring .bar {
+      width: 100%;
+    }
+
+    /* ===== Responsive ===== */
+    @media (max-width: 640px) {
+      .specs { grid-template-columns: 1fr; }
+      body { padding: 32px 16px; }
+      .header h1 { font-size: 22px; }
+    }
+    </style>
   </head>
   <body>
-      <header>
-            <h1>Likey Design Guide</h1>
-          <p>Design System & Style Guide</p>
-      </header>
-    <div class="container">
-        <div class="section">
-              <h2>Colors</h2>
-              <div class="color-grid">
-                      <div class="color-card">
-                                <div class="color-swatch" style="background:#6C5CE7"></div>div>
-                                <div class="color-info">Primary<br>#6C5CE7</div>div>
-                      </div>div>
-                      <div class="color-card">
-                                <div class="color-swatch" style="background:#A29BFE"></div>div>
-                                <div class="color-info">Secondary<br>#A29BFE</div>div>
-                      </div>div>
-                      <div class="color-card">
-                                <div class="color-swatch" style="background:#00B894"></div>div>
-                                <div class="color-info">Success<br>#00B894</div>div>
-                      </div>div>
-                      <div class="color-card">
-                                <div class="color-swatch" style="background:#FDCB6E"></div>div>
-                                <div class="color-info">Warning<br>#FDCB6E</div>div>
-                      </div>div>
-                      <div class="color-card">
-                                <div class="color-swatch" style="background:#E17055"></div>div>
-                                <div class="color-info">Danger<br>#E17055</div>div>
-                      </div>div>
-              </div>div>
-        </div>div>
-        <div class="section">
-              <h2>Typography</h2>
-              <h1 style="margin-bottom:8px">Heading 1 - 2.5rem</h1>
-              <h2 style="margin-bottom:8px;color:#333">Heading 2 - 1.5rem</h2>
-              <h3 style="margin-bottom:8px">Heading 3 - 1.25rem</h3>
-              <p style="margin-bottom:8px">Body text - 1rem. This is the default paragraph style.</p>
-              <small>Small text - 0.85rem</small>
-        </div>div>
-        <div class="section">
-              <h2>Buttons</h2>
-              <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:12px">
-                      <button style="background:#6C5CE7;color:white;border:none;padding:12px 24px;border-radius:8px;font-size:1rem;cursor:pointer">Primary</button>button>
-                      <button style="background:white;color:#6C5CE7;border:2px solid #6C5CE7;padding:12px 24px;border-radius:8px;font-size:1rem;cursor:pointer">Secondary</button>button>
-                      <button style="background:#E17055;color:white;border:none;padding:12px 24px;border-radius:8px;font-size:1rem;cursor:pointer">Danger</button>button>
-                      <button style="background:#dfe6e9;color:#636e72;border:none;padding:12px 24px;border-radius:8px;font-size:1rem;cursor:pointer">Disabled</button>button>
-              </div>div>
-        </div>div>
+
+    <div class="header">
+      <div class="badge">LIKEY Design System</div>div>
+      <h1>Button Loading Animation</h1>
+    <p>사용자가 버튼을 클릭(Submit)했을 때, 텍스트 라벨이 사라지고<br>로딩 스피너가 나타나는 전환 과정을 정의합니다.</p>
     </div>div>
-    <footer>
-          &copy; 2026 Likey Design Guide. All rights reserved.
-    </footer>
+  
+  <div class="demo-area">
+  <!-- Phone Mockup -->
+  <div class="phone-frame">
+  <div class="phone-status">
+  <div class="phone-notch"></div>div>
+  </div>div>
+  <div class="phone-content">
+  <div class="info-section">
+  <div class="info-row"><span>총 주문가격</span><span>₩ 120,000</span></div>div>
+  <div class="info-row" style="font-size:12px;color:#999"><span>└ 플랜 가격(월 정기결제)</span><span>₩ 150,000</span></div>div>
+  <div class="info-row"><span>Payment fee & tax</span><span>₩ 1,400</span></div>div>
+  <div class="info-row total"><span>오늘 결제 금액</span><span>₩ 15,400</span></div>div>
+  </div>div>
+  
+  <button class="action-btn" id="actionBtn" onclick="triggerLoading()">
+  <div class="progress-ring"><div class="bar"></div>div></div>div>
+  <div class="btn-label" id="btnLabel">Primary</div>div>
+  <div class="btn-spinner" id="btnSpinner">
+  <div class="spinner-ring" id="spinnerRing"></div>div>
+  </div>div>
+  </button>button>
+  </div>div>
+  </div>div>
+  
+  <!-- Controls -->
+  <div class="controls">
+  <button class="reset-btn" onclick="resetAnimation()">Reset</button>button>
+  <span class="hint">버튼을 클릭하면 애니메이션이 재생됩니다</span>
+  </div>div>
+  </div>div>
+  
+  <!-- Spec Cards -->
+  <div style="height: 40px"></div>div>
+  <div class="specs">
+  <div class="spec-card">
+  <div class="spec-title">
+  <div class="spec-dot" style="background:#413EF0"></div>div>
+  <span class="spec-name">Button Label</span>
+  <span class="spec-action">Exit · 퇴장</span>
+  </div>div>
+  <div class="spec-rows">
+  <div class="spec-row"><span class="key">Property</span><span class="val">Opacity</span></div>div>
+  <div class="spec-row"><span class="key">Value</span><span class="val brand">100% → 0%</span></div>div>
+  <div class="spec-row"><span class="key">Delay</span><span class="val">0ms</span></div>div>
+  <div class="spec-row"><span class="key">Duration</span><span class="val">150ms</span></div>div>
+  <div class="spec-row"><span class="key">Easing</span><span class="val">Ease-In</span></div>div>
+  </div>div>
+  </div>div>
+  <div class="spec-card">
+  <div class="spec-title">
+  <div class="spec-dot" style="background:#FF424D"></div>div>
+  <span class="spec-name">Spinner</span>
+  <span class="spec-action">Enter · 등장</span>
+  </div>div>
+  <div class="spec-rows">
+  <div class="spec-row"><span class="key">Property</span><span class="val">Opacity · Scale</span></div>div>
+  <div class="spec-row"><span class="key">Value</span><span class="val brand">0%→100% · 0.8→1.0</span></div>div>
+  <div class="spec-row"><span class="key">Delay</span><span class="val">100ms</span></div>div>
+  <div class="spec-row"><span class="key">Duration</span><span class="val">200ms</span></div>div>
+  <div class="spec-row"><span class="key">Easing</span><span class="val">Ease-Out (Back)</span></div>div>
+  </div>div>
+  </div>div>
+  </div>div>
+  
+  <!-- Timeline -->
+  <div style="height: 12px"></div>div>
+  <div class="timeline-section">
+  <div class="timeline-label">Timeline</div>div>
+  <div class="timeline-tracks">
+  <div class="track">
+  <div class="track-name">Label Exit</div>div>
+  <div class="track-bar-area">
+  <div class="track-bar label-bar">150ms</div>div>
+  </div>div>
+  </div>div>
+  <div class="track">
+  <div class="track-name">Spinner Enter</div>div>
+  <div class="track-bar-area">
+  <div class="track-bar spinner-bar">200ms</div>div>
+  </div>div>
+  </div>div>
+  </div>div>
+  <div class="timeline-axis">
+  <span class="axis-tick">0ms</span>
+  <span class="axis-tick">100ms</span>
+  <span class="axis-tick">150ms</span>
+  <span class="axis-tick">200ms</span>
+  <span class="axis-tick">300ms</span>
+  <span class="axis-tick">600ms</span>
+  </div>div>
+  </div>div>
+  
+  <script>
+    let isLoading = false;
+
+    function triggerLoading() {
+      if (isLoading) return;
+      isLoading = true;
+
+      const btn = document.getElementById('actionBtn');
+      const label = document.getElementById('btnLabel');
+      const spinner = document.getElementById('btnSpinner');
+      const ring = document.getElementById('spinnerRing');
+
+      btn.classList.add('is-loading');
+
+      // Step 1: Label Exit
+      label.classList.add('exit');
+
+      // Step 2: Spinner Enter
+      spinner.classList.add('enter');
+      ring.classList.add('spin');
+    }
+
+    function resetAnimation() {
+      const btn = document.getElementById('actionBtn');
+      const label = document.getElementById('btnLabel');
+      const spinner = document.getElementById('btnSpinner');
+      const ring = document.getElementById('spinnerRing');
+
+      label.style.transition = 'none';
+      spinner.style.transition = 'none';
+
+      btn.classList.remove('is-loading');
+      label.classList.remove('exit');
+      spinner.classList.remove('enter');
+      ring.classList.remove('spin');
+
+      void label.offsetHeight;
+
+      label.style.transition = '';
+      spinner.style.transition = '';
+
+      isLoading = false;
+    }
+  </script>
+
   </body>
 </html>html>
-    </footer></small></p></h1>
-      </header>
+  </script></span></span></p></h1>
   </body>
-    </style></title>
+  </style></title>
   </head>
